@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relógio Dinâmico</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            background-size: cover;
+            background-position: center center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .morning {
+            background-image: url("./img/morning.jpg");
+        }
+
+        .afternoon {
+            background-image: url("./img/afternoon.jpg");
+        }
+
+        .night {
+            background-image: url("./img/night.jpg");
+            color: #fff8dc;
+        }
+
+        #title,
+        #time,
+        #date,
+        #greetings,
+        #phrase {
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+        }
+
+        #time {
+            font-size: 100px;
+        }
+        @media (max-width: 500px) {
+            #time {
+                font-size: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <span id="date">...</span>
+    <span id="time"></span>
+    <span id="greetings"></span>
+    <span id="phrase"></span>
+
+    <script>
+        let date = document.querySelector("#date");
+        let time = document.querySelector("#time");
+        let phrase = document.querySelector("#phrase");
+
+        setInterval(() => {
+            let full = new Date(); // Hora real
+            // let full = new Date(2020, 8, 25, 8); // manha
+            // let full = new Date(2020, 8, 25, 14); // tarde
+            // let full = new Date(2020, 8, 25, 1); // noite
+            // let full = new Date(2020, 8, 21); // segunda
+            // let full = new Date(2020, 8, 22); // terca
+            // let full = new Date(2020, 8, 23); // quarta
+            // let full = new Date(2020, 8, 24); // quinta
+            // let full = new Date(2020, 8, 25); // sexta
+            // let full = new Date(2020, 8, 26); // sabado
+            // let full = new Date(2020, 8, 27); // domingo
+            
+            let day = full.getDate();
+            let month = full.getMonth();
+            let year = full.getFullYear();
+            let hour = full.getHours();
+            let minute = full.getMinutes();
+            let second = full.getSeconds();
+            let week = full.getDay();
+
+            defineBackground(hour);
+
+            // out
+            date.textContent = `${day}/${month + 1}/${year}`;
+            time.textContent = `${hour}:${minute}:${second}`;
+            phrase.textContent = getPhrase(week);
+        }, 1000);
+
+        function getPhrase(week) {
+            if (week == 0) { return "Está entediado? É porque hoje é domingo"; }
+            else if (week == 1) { return "Toda segunda-feira é dificil de acordar, eu sei."; }
+            else if (week == 2) { return "Hoje é terça, coloque em dia o que você postergou ontem!"; }
+            else if (week == 3) { return "Quarta é dia de futebol."; }
+            else if (week == 4) { return "Vamos lá! Hoje é quinta, a semana esta acabando."; }
+            else if (week == 5) { return "É sexta-feira, bora descansar!"; }
+            else { return "Hoje é sábado, dia de diversão"; }
+        }
+
+        function defineBackground(hour) {
+            let body = document.querySelector("body");
+            let greetings = document.querySelector("#greetings");
+
+            if (hour > 5 && hour < 12 && !(body.className == "morning")) {
+                console.log("morning");
+                body.className = "";
+                body.classList.add("morning");
+                greetings.textContent = "Bom dia!";
+            } else if (hour > 11 && hour < 18 && !(body.className == "afternoon")) {
+                console.log("afternoon");
+                body.className = "";
+                body.classList.add("afternoon");
+                greetings.textContent = "Bom tarde!";
+            } else if((hour > 17 || hour < 6) && !(body.className == "night")){
+                console.log("night");
+                body.className = "";
+                body.classList.add("night");
+                greetings.textContent = "Boa noite!";
+            }
+        }
+
+    </script>
+</body>
+
+</html>
